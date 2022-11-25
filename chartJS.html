@@ -5,70 +5,133 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Implementando o ChartJS</title>
+    <title>Testando o ChartJS</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
-<body style="display: flex;">
-    <div>
-        <canvas id="myChart" style="position: relative; height:40vh; width:30vw"></canvas>
+<body>
+    <div style="display: flex;">
+        <div>
+            <canvas id="graficoLinhas" style="position: relative; height:40vh; width:30vw"></canvas>
+        </div>
+        <div>
+            <canvas id="graficoBarras" style="position: relative; height:40vh; width:30vw"></canvas>
+        </div>
     </div>
-    <div>
-        <canvas id="myChart2" style="position: relative; height:40vh; width:30vw"></canvas>
-    </div>
-    <div>
-        <canvas id="myChart3" style="position: relative; height:40vh; width:30vw"></canvas>
+    <div style="display: flex;">
+        <div>
+            <canvas id="graficoDonut" style="position: relative; height:40vh; width:30vw"></canvas>
+        </div>
+        <div>
+            <canvas id="graficoMutavel" style="position: relative; height:40vh; width:30vw"></canvas>
+        </div>
     </div>
 </body>
 
 </html>
 <script>
-    const labels = [
-        'January',
-        'February',
-        'March',
-        'April',
-        'May',
-        'June',
-    ];
-
     const data = {
-        labels: labels,
+        labels: [
+            'Janeiro',
+            'Fevereiro',
+            'Março',
+            'Abril',
+            'Maio',
+            'Junho',
+        ],
         datasets: [{
-            label: 'My First dataset',
-            backgroundColor: 'rgb(255, 99, 132)',
-            borderColor: 'rgb(255, 99, 132)',
-            data: [0, 10, 5, 2, 20, 30, 45],
+            label: 'Gastos e Despesas',
+            backgroundColor: '#F5222C',
+            borderColor: '#F5222C',
+            data: [50, 25, 20, 5, 20, 30],
+        },
+        {
+            label: 'Faturamento',
+            backgroundColor: '#85E041',
+            borderColor: '#85E041',
+            data: [25, 30, 30, 25, 40, 45],
         }]
-    };
+    }
 
-    const config = {
-        type: 'line',
-        data: data,
-        options: {}
-    };
-    const config2 = {
-        type: 'bar',
-        data: data,
-        options: {}
-    };
-    const config3 = {
-        type: 'doughnut',
-        data: data,
-        options: {}
-    };
-</script>
-<script>
-    const myChart = new Chart(
-        document.getElementById('myChart'),
-        config
-    );
-    const myChart2 = new Chart(
-        document.getElementById('myChart2'),
-        config2
-    );
-    const myChart3 = new Chart(
-        document.getElementById('myChart3'),
-        config3
-    );
+    new Chart(
+        graficoLinhas,
+        {
+            type: 'line',
+            data: data,
+            options: {}
+        }
+    )
+    new Chart(
+        graficoBarras,
+        {
+            type: 'bar',
+            data: data,
+            options: {}
+        }
+    )
+    new Chart(
+        graficoDonut,
+        {
+            type: 'doughnut',
+            data: {
+                labels: [
+                    'Janeiro',
+                    'Fevereiro',
+                    'Março',
+                    'Abril',
+                    'Maio',
+                    'Junho',
+                ],
+                datasets: [{
+                    label: 'Gastos e Despesas',
+                    backgroundColor: ['#F5222C', '#fd0402', '#e21d46', '#fb2304', '#ff4100', '#de2123'],
+                    data: [50, 5, 10, 20, 30, 5],
+                }]
+            },
+            options: {}
+        }
+    )
+    var teste = new Chart(
+        graficoMutavel,
+        {
+            type: 'line',
+            data: {
+                labels: [
+                    'Janeiro',
+                    'Fevereiro',
+                    'Março',
+                    'Abril',
+                    'Maio',
+                    'Junho',
+                ],
+                datasets: [{
+                    label: 'Gastos e Despesas',
+                    backgroundColor: '#F5222C',
+                    borderColor: '#F5222C',
+                    data: [50, 25, 20, 5, 20, 30],
+                }]
+            },
+            options: {}
+        }
+    )
+    function adicionarValor() {
+        const date = new Date()
+        var dia = ""
+        var hora = ""
+        dateTime = [String(date.getDate()), String(date.getMonth()+1), String(date.getFullYear()), String(date.getHours()), String(date.getMinutes()), String(date.getSeconds())]
+        for (i = 0; i < 6; i++) {
+            if (i == 1 || i == 2) {dia += `/`} else if (i == 4 || i == 5) {hora += `:`}
+            if (dateTime[i].length < 2) {
+                if (i < 3) {dia += `0${dateTime[i]}`} else {hora += `0${dateTime[i]}`}
+            } else {
+                if (i < 3) {dia += dateTime[i]} else {hora += dateTime[i]}
+            }
+        }
+        teste.data.labels.shift()
+        teste.data.labels.push(hora)
+        teste.data.datasets[0].data.shift()
+        teste.data.datasets[0].data.push(Math.floor((Math.random() * 30) - 0))
+        teste.update()
+    }
+    setInterval(adicionarValor, 3000)
 </script>
